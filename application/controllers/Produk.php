@@ -5,6 +5,16 @@ use GuzzleHttp\Client;
 
 class Produk extends CI_Controller
 {
+    public function index()
+    {
+        $this->load->model('MProduk');
+        $data['produk'] = $this->MProduk->getDataProduk()->result();
+
+        $this->load->view('/templates/header', $data);
+        $this->load->view('produk', $data);
+        $this->load->view('/templates/footer', $data);
+    }
+
     public function getDataApi()
     {
         $username = 'tesprogrammer021223C16';
