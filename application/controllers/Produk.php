@@ -13,7 +13,7 @@ class Produk extends CI_Controller
 
         $this->load->view('/templates/header', $data);
         $this->load->view('produk', $data);
-        $this->load->view('/templates/footer', $data);
+        $this->load->view('/templates/footer');
     }
 
     public function produkJual()
@@ -27,82 +27,93 @@ class Produk extends CI_Controller
         $this->load->view('/templates/footer', $data);
     }
 
-    public function getDataApi()
+    public function addProduk()
     {
-        $username = 'tesprogrammer021223C16';
-        $password = 'bisacoding-02-12-23';
-        $client = new Client();
+        $data['title'] = 'Halaman Tambah Produk';
+        $this->load->model('MKategori');
+        $this->load->model('MStatus');
+        $data['kategori'] = $this->MKategori->getDataKategori()->result();
+        $data['status'] = $this->MStatus->getDataStatus()->result();
 
-        $response = $client->request('POST', 'https://recruitment.fastprint.co.id/tes/api_tes_programmer', [
-            'form_params' => [
-                'username' => $username,
-                'password' => md5($password)
+        $this->load->view('/templates/header', $data);
+        $this->load->view('tambah-produk');
+        $this->load->view('/templates/footer');
+    }
+
+    public function insertProduk()
+    {
+        $validation_rules = [
+            [
+                'field' => 'nama_produk',
+                'label' => 'Nama Produk',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => '<strong>%s harus diisi</strong>',
+                ]
             ],
-            'verify' => false,
-        ]);
+            [
+                'field' => 'harga',
+                'label' => 'Harga',
+                'rules' => 'required|numeric',
+                'errors' => [
+                    'required' => '<strong>%s harus diisi</strong>',
+                    'numeric' => '<strong>%s harus diisi dengan angka saja</strong>'
+                ]
+            ],
+            [
+                'field' => 'kategori_id',
+                'label' => 'Kategori',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => '<strong>%s harus diisi</strong>'
+                ]
+            ],
+            [
+                'field' => 'status_id',
+                'label' => 'Status',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => '<strong>%s harus diisi</strong>'
+                ]
+            ]
+        ];
 
-        $result = json_decode($response->getBody()->getContents(), TRUE);
+        $this->form_validation->set_rules($validation_rules);
 
-        // header("Content-Type: application/json");
-        // print_r(json_encode($result['data']));
-        // exit();
+        if ($this->form_validation->run() == FALSE) {
+            foreach ($validation_rules as $rule) {
+                $field = $rule['field'];
+                $error_message = form_error($field);
 
-        foreach ($result['data'] as $produkData) {
-            $this->insertKategori($produkData['kategori']);
-            $this->insertStatus($produkData['status']);
-            $this->insertProduk($produkData);
+                $this->session->set_flashdata($field, '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span class="alert-text">' . $error_message . '</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>');
+            }
+            redirect(base_url('Produk/addProduk'));
         }
 
-        return $result['data'];
-    }
+        $nama_produk = $this->input->post('nama_produk');
+        $harga = $this->input->post('harga');
+        $kategori_id = $this->input->post('kategori_id');
+        $status_id = $this->input->post('status_id');
 
-    public function insertKategori($namaKategori)
-    {
-        $query = $this->db->get_where('kategori', ['nama_kategori' => $namaKategori]);
-        $result = $query->row();
+        $produk = [
+            'nama_produk' => $nama_produk,
+            'harga' => $harga,
+            'kategori_id' => $kategori_id,
+            'status_id' => $status_id
+        ];
+        $this->db->insert('produk', $produk);
 
-        if (!$result) {
-            $this->db->insert('kategori', ['nama_kategori' => $namaKategori]);
-        }
-    }
-
-    public function insertStatus($namaStatus)
-    {
-        $query = $this->db->get_where('status', ['nama_status' => $namaStatus]);
-        $result = $query->row();
-
-        if (!$result) {
-            $this->db->insert('status', ['nama_status' => $namaStatus]);
-        }
-    }
-
-    public function insertProduk($produkData)
-    {
-        $kategoriId = $this->getKategoriId($produkData['kategori']);
-        $statusId = $this->getStatusId($produkData['status']);
-
-        $this->db->insert('produk', [
-            'id_produk' => $produkData['id_produk'],
-            'nama_produk' => $produkData['nama_produk'],
-            'harga' => $produkData['harga'],
-            'kategori_id' => $kategoriId,
-            'status_id' => $statusId
-        ]);
-    }
-
-    public function getKategoriId($namaKategori)
-    {
-        $query = $this->db->get_where('kategori', ['nama_kategori' => $namaKategori]);
-        $result = $query->row();
-
-        return $result->id_kategori;
-    }
-
-    public function getStatusId($namaStatus)
-    {
-        $query = $this->db->get_where('status', ['nama_status' => $namaStatus]);
-        $result = $query->row();
-
-        return $result->id_status;
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span class="alert-text"><strong>Data berhasil disimpan</strong></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>');
+        redirect(base_url('Produk/produkJual'));
     }
 }
