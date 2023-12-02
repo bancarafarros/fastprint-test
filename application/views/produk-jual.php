@@ -4,6 +4,11 @@
     <br>
 
     <?= $this->session->flashdata('message'); ?>
+    <?= $this->session->flashdata('nama_produk'); ?>
+    <?= $this->session->flashdata('harga'); ?>
+    <?= $this->session->flashdata('kategori_id'); ?>
+    <?= $this->session->flashdata('status_id'); ?>
+
     <div class="row">
         <div class="col-md-6">
             <a href="<?= base_url('Produk/addProduk'); ?>" class="btn btn-sm btn-primary"><i class="fa-solid fa-plus"></i> Tambah Produk</a>
