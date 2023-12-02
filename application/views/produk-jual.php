@@ -1,9 +1,9 @@
 <div class="container-fluid">
 
-    <h1>Daftar Produk</h1>
+    <h1>Daftar Produk Dijual</h1>
     <br>
 
-    <a href="<?= base_url('Produk/produkJual'); ?>" class="btn btn-sm btn-primary">Daftar Produk Dijual</a>
+    <a href="<?= base_url('Produk'); ?>" class="btn btn-sm btn-primary">Daftar Produk</a>
     <br><br>
 
     <table class="table table-responsive table-bordered table-striped" style="margin: auto;">
@@ -13,7 +13,7 @@
                 <th class="text-center">Nama Produk</th>
                 <th class="text-center">Harga</th>
                 <th class="text-center">Kategori ID</th>
-                <th class="text-center">Status ID</th>
+                <th class="text-center">Status</th>
             </tr>
 
             <?php
@@ -25,7 +25,7 @@
                     <td><?= $prdk->nama_produk; ?></td>
                     <td>Rp <?= number_format($prdk->harga, 0, ',', '.'); ?></td>
                     <td><?= $prdk->kategori_id; ?></td>
-                    <td><?= $prdk->status_id; ?></td>
+                    <td><?= $prdk->status_id == 1 ? 'bisa dijual' : 'tidak bisa dijual'; ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

@@ -8,10 +8,22 @@ class Produk extends CI_Controller
     public function index()
     {
         $this->load->model('MProduk');
+        $data['title'] = 'Daftar Produk';
         $data['produk'] = $this->MProduk->getDataProduk()->result();
 
         $this->load->view('/templates/header', $data);
         $this->load->view('produk', $data);
+        $this->load->view('/templates/footer', $data);
+    }
+
+    public function produkJual()
+    {
+        $this->load->model('MProduk');
+        $data['title'] = 'Daftar Produk Dijual';
+        $data['produk'] = $this->MProduk->getDataProdukJual()->result();
+
+        $this->load->view('/templates/header', $data);
+        $this->load->view('produk-jual', $data);
         $this->load->view('/templates/footer', $data);
     }
 
