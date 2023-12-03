@@ -216,4 +216,18 @@ class Produk extends CI_Controller
             </div>');
         redirect(base_url('Produk/produkJual'));
     }
+
+    public function deleteProduk($id_produk)
+    {
+        $this->db->where('id_produk', $id_produk);
+        $this->db->delete('produk');
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span class="alert-text"><strong>Data berhasil dihapus</strong></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>');
+        redirect(base_url('Produk/produkJual'));
+    }
 }

@@ -15,7 +15,9 @@
                 <th class="text-center">Kategori ID</th>
                 <th class="text-center">Status ID</th>
             </tr>
+        </thead>
 
+        <tbody>
             <?php
             $no = 1;
             foreach ($produk as $prdk) :
@@ -28,6 +30,6 @@
                     <td><?= $prdk->status_id; ?></td>
                 </tr>
             <?php endforeach; ?>
-            </tbody>
+        </tbody>
     </table>
 </div>

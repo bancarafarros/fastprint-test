@@ -29,7 +29,9 @@
                 <th class="text-center">Status</th>
                 <th class="text-center" colspan="2">Aksi</th>
             </tr>
+        </thead>
 
+        <tbody>
             <?php
             $no = 1;
             foreach ($produk as $prdk) :
@@ -41,19 +43,13 @@
                     <td><?= $prdk->kategori_id; ?></td>
                     <td><?= $prdk->status_id == 1 ? 'bisa dijual' : 'tidak bisa dijual'; ?></td>
                     <td>
-                        <?= anchor(
-                            'Produk/editProduk/' . $prdk->id_produk,
-                            '<div class="btn btn-warning btn-sm"><i class="fa-solid fa-edit"></i></div>'
-                        ) ?>
+                        <a href="<?= base_url('Produk/editProduk/' . $prdk->id_produk); ?>" class="btn btn-sm btn-warning"><i class="fa-solid fa-edit"></i></a>
                     </td>
                     <td>
-                        <?= anchor(
-                            'Produk/deleteProduk/' . $prdk->id_produk,
-                            '<div class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></div>'
-                        ) ?>
+                        <a href="<?= base_url('Produk/deleteProduk/' . $prdk->id_produk); ?>" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin menghapus data ini?')"><i class="fa-solid fa-trash"></i></a>
                     </td>
                 </tr>
             <?php endforeach; ?>
-            </tbody>
+        </tbody>
     </table>
 </div>
