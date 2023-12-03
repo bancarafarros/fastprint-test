@@ -168,7 +168,7 @@ class Produk extends CI_Controller
 
     /**
      * Menampilkan halaman edit produk
-     * * @param int $id_produk ID produk yang akan diedit
+     * @param int $id_produk, id produk yang akan diedit
      */
     public function editProduk($id_produk)
     {
@@ -299,7 +299,7 @@ class Produk extends CI_Controller
 
     /**
      * Menghapus data produk di database
-     * @param int $id_produk ID produk yang akan dihapus
+     * @param int $id_produk, id produk yang akan dihapus
      */
     public function deleteProduk($id_produk)
     {
